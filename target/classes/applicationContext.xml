@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<bean id="student" class="com.javalec.ex.Student">
+		<property name="name" value="홍길동"></property>
+		<property name="age" value="34"></property>
+		<property name="gradeNum" value="3"></property>
+		<property name="classNum" value="4"></property>
+	</bean>
+	
+	<bean id="worker" class="com.javalec.ex.Worker">
+		<property name="name" value="홍길동"></property>
+		<property name="age" value="34"></property>
+		<property name="job" value="개발자"></property>
+	</bean>
+	
+	<!-- 공통 기능 구현 클래스 -->
+	<bean id="logAop" class="com.javalec.ex.LogAop" />
+	
+	<aop:config>
+		<!-- 사용할 공통 기능 -->
+		<aop:aspect id="logger" ref="logAop">
+		
+			<!-- com.javalec.ex 아래에 있는 모든 메소드들에 공통 기능을 적용하겠다. -->
+			<aop:pointcut id="publicM" expression="within(com.javalec.ex.*)" />
+			
+			<!-- advice. around 는 advice 중에 하나이다. publicM 이라는 포인트컷에 loggerAop 라는 공통기능을 적용하겠다. -->
+			<aop:around pointcut-ref="publicM" method="loggerAop" />
+			
+		</aop:aspect>
+	</aop:config>
+	
+	<aop:aspectj-autoproxy />
+
+</beans>
